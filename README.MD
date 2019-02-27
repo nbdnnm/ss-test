@@ -14,4 +14,4 @@ src/test/java/io.fake.pages - pages of the portal used in tests
 
 gradlew clean test
 
-One of test fails do to bug on the portal, alert message is not translated on the search page
+One of the test fails due to bug on the portal, alert message is not translated on the search page
