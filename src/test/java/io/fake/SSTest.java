@@ -54,7 +54,10 @@ public class SSTest {
     public void testOpenAdvertisementFromFavorite() {
         String originalAdvertisementLink = addAdvertisementToFavorites("Vacancies", "Administrator", 3)
                 .getAdvertisementLink();
-        String advertisementLinkOpenedFromMemo = new NavigationMenu().openMemo().openAdvertisementFromMemoWithLink(originalAdvertisementLink).getAdvertisementLink();
+        String advertisementLinkOpenedFromMemo = new NavigationMenu()
+                .openMemo()
+                .openAdvertisementFromMemoWithLink(originalAdvertisementLink)
+                .getAdvertisementLink();
         assertEquals(originalAdvertisementLink, advertisementLinkOpenedFromMemo);
     }
 
