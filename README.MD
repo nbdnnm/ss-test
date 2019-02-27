@@ -22,3 +22,4 @@ Potential improvements:
 - parallel run per class/method
 - selenoid as selenium server
 - checks of javascript console on errors during testing
+- etc
