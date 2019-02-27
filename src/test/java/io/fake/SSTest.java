@@ -16,6 +16,8 @@ import static org.junit.Assert.assertTrue;
 
 public class SSTest {
 
+    String portalURL = "https://www.ss.com/en";
+
     @Before
     public void setUp() {
         Configuration.startMaximized = true;
@@ -30,18 +32,17 @@ public class SSTest {
 
     @Test
     public void testFavoriteAddedToMemo() {
-        AdvertisementPage advertisementPage = addAdvertisementToFavorites("Vacancies", "Administrator", 2);
-        String advertisementLink = advertisementPage
-                .getAdvertisementLink();
+        String advertisementLink = addAdvertisementToFavorites("Vacancies", "Administrator", 2).
+                getAdvertisementLink();
         MemoPage memos = new NavigationMenu().openMemo();
         assertTrue(memos.isThereMemoWithLink(advertisementLink));
     }
 
     @Test
     public void testTwoFavoritesAddedToMemo() {
-        String advertisementLinkFirst = addAdvertisementToFavorites("Vacancies", "Administrator", 2)
+        String advertisementLinkFirst = addAdvertisementToFavorites("Vacancies", "Administrator", 5)
                 .getAdvertisementLink();
-        String advertisementLinkSecond = addAdvertisementToFavorites("Vacancies", "Administrator", 5)
+        String advertisementLinkSecond = addAdvertisementToFavorites("Vacancies", "Administrator", 6)
                 .getAdvertisementLink();
         MemoPage memos = new NavigationMenu().openMemo();
 
@@ -60,7 +61,7 @@ public class SSTest {
     //issue! functionality doesn't work as expected, alert message is not translated
     @Test
     public void testFavoriteAddedFromSearch() {
-        open("https://www.ss.com/en");
+        open(portalURL);
         new NavigationMenu()
                 .openSearch()
                 .searchByWord("Linux")
@@ -71,13 +72,12 @@ public class SSTest {
     }
 
     private AdvertisementPage addAdvertisementToFavorites(String category, String subCategory, Integer advertisementNumber) {
-        open("https://www.ss.com/en");
+        open(portalURL);
         return new MainPage()
                 .openCategoryPage(category)
                 .openSubCategoryPage(subCategory)
                 .openAdvertisement(advertisementNumber)
                 .addToFavourites();
-
     }
 
     private void assertAlertMessageAddedToFavorites() {
@@ -85,5 +85,4 @@ public class SSTest {
                 .getAlertMessage()
                 .shouldHave(Condition.matchesText("Advertisement added to favorites."));
     }
-
 }
