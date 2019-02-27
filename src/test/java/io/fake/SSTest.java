@@ -23,13 +23,13 @@ public class SSTest {
     }
 
     @Test
-    public void testFavoriteAlert() {
+    public void testAddToFavoriteAlert() {
         addAdvertisementToFavorites("Vacancies", "Administrator", 1);
         assertAlertMessageAddedToFavorites();
     }
 
     @Test
-    public void testFavoriteAdded() {
+    public void testFavoriteAddedToMemo() {
         AdvertisementPage advertisementPage = addAdvertisementToFavorites("Vacancies", "Administrator", 2);
         String advertisementLink = advertisementPage
                 .getAdvertisementLink();
@@ -38,7 +38,7 @@ public class SSTest {
     }
 
     @Test
-    public void testTwoFavoritesAdded() {
+    public void testTwoFavoritesAddedToMemo() {
         String advertisementLinkFirst = addAdvertisementToFavorites("Vacancies", "Administrator", 2)
                 .getAdvertisementLink();
         String advertisementLinkSecond = addAdvertisementToFavorites("Vacancies", "Administrator", 5)
@@ -50,16 +50,16 @@ public class SSTest {
     }
 
     @Test
-    public void testOpenAdvertisementFomFavorite() {
+    public void testOpenAdvertisementFromFavorite() {
         String originalAdvertisementLink = addAdvertisementToFavorites("Vacancies", "Administrator", 3)
                 .getAdvertisementLink();
         String advertisementLinkOpenedFromMemo = new NavigationMenu().openMemo().openAdvertisementFromMemoWithLink(originalAdvertisementLink).getAdvertisementLink();
         assertEquals(originalAdvertisementLink, advertisementLinkOpenedFromMemo);
     }
 
-    //issue! functionality works not as expected, alert message is not translated
+    //issue! functionality doesn't work as expected, alert message is not translated
     @Test
-    public void testFavoriteAddFromSearch() {
+    public void testFavoriteAddedFromSearch() {
         open("https://www.ss.com/en");
         new NavigationMenu()
                 .openSearch()
