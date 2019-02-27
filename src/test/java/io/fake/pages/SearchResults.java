@@ -10,8 +10,7 @@ public class SearchResults {
         return this;
     }
 
-    public SearchResults addToFavourites() {
+    public void addToFavourites() {
         $x("//a[@id='a_fav_sel']").click();
-        return this;
     }
 }
