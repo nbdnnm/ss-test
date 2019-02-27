@@ -1,6 +1,9 @@
 package io.fake;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
+import io.fake.elements.AlertMessage;
+import io.fake.elements.NavigationMenu;
 import io.fake.pages.AdvertisementPage;
 import io.fake.pages.MainPage;
 import io.fake.pages.MemoPage;
@@ -8,22 +11,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class SSTest {
 
     @Before
     public void setUp() {
-        open("https://www.ss.com/en");
-        getWebDriver().manage().window().maximize();
+        Configuration.startMaximized = true;
+        Configuration.browser = "firefox";
     }
 
     @Test
     public void testFavoriteAlert() {
-        addAdvertisementToFavorites("Vacancies", "Administrator", 1)
-                .getAlertMessage()
-                .shouldHave(Condition.matchesText("Advertisement added to favorites."));
+        addAdvertisementToFavorites("Vacancies", "Administrator", 1);
+        assertAlertMessageAddedToFavorites();
     }
 
     @Test
@@ -35,12 +37,53 @@ public class SSTest {
         assertTrue(memos.isThereMemoWithLink(advertisementLink));
     }
 
+    @Test
+    public void testTwoFavoritesAdded() {
+        String advertisementLinkFirst = addAdvertisementToFavorites("Vacancies", "Administrator", 2)
+                .getAdvertisementLink();
+        String advertisementLinkSecond = addAdvertisementToFavorites("Vacancies", "Administrator", 5)
+                .getAdvertisementLink();
+        MemoPage memos = new NavigationMenu().openMemo();
+
+        assertTrue(memos.isThereMemoWithLink(advertisementLinkFirst));
+        assertTrue(memos.isThereMemoWithLink(advertisementLinkSecond));
+    }
+
+    @Test
+    public void testOpenAdvertisementFomFavorite() {
+        String originalAdvertisementLink = addAdvertisementToFavorites("Vacancies", "Administrator", 3)
+                .getAdvertisementLink();
+        String advertisementLinkOpenedFromMemo = new NavigationMenu().openMemo().openAdvertisementFromMemoWithLink(originalAdvertisementLink).getAdvertisementLink();
+        assertEquals(originalAdvertisementLink, advertisementLinkOpenedFromMemo);
+    }
+
+    //issue! functionality works not as expected, alert message is not translated
+    @Test
+    public void testFavoriteAddFromSearch() {
+        open("https://www.ss.com/en");
+        new NavigationMenu()
+                .openSearch()
+                .searchByWord("Linux")
+                .selectAdvertisements(1)
+                .selectAdvertisements(2)
+                .addToFavourites();
+        assertAlertMessageAddedToFavorites();
+    }
+
     private AdvertisementPage addAdvertisementToFavorites(String category, String subCategory, Integer advertisementNumber) {
+        open("https://www.ss.com/en");
         return new MainPage()
                 .openCategoryPage(category)
                 .openSubCategoryPage(subCategory)
                 .openAdvertisement(advertisementNumber)
                 .addToFavourites();
+
+    }
+
+    private void assertAlertMessageAddedToFavorites() {
+        new AlertMessage()
+                .getAlertMessage()
+                .shouldHave(Condition.matchesText("Advertisement added to favorites."));
     }
 
 }
