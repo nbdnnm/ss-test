@@ -48,11 +48,6 @@ public class SSTest {
         assertLinkIsInFavorites(advertisementLinkSecond);
     }
 
-    private void assertLinkIsInFavorites(String advertisementLinkFirst) {
-        MemoPage memos = new NavigationMenu().openMemo();
-        assertTrue("The link is not in favorites", memos.isThereMemoWithLink(advertisementLinkFirst));
-    }
-
     @Test
     public void testOpenAdvertisementFromFavorite() {
         String originalAdvertisementLink = addAdvertisementToFavorites(3)
@@ -65,6 +60,7 @@ public class SSTest {
     }
 
     //issue! functionality doesn't work as expected, alert message is not translated
+
     @Test
     public void testFavoriteAddedFromSearch() {
         open(PORTAL_URL);
@@ -75,6 +71,11 @@ public class SSTest {
                 .selectAdvertisements(2)
                 .addToFavourites();
         assertAlertMessageAddedToFavorites();
+    }
+
+    private void assertLinkIsInFavorites(String advertisementLinkFirst) {
+        MemoPage memos = new NavigationMenu().openMemo();
+        assertTrue("The link is not in favorites", memos.isThereMemoWithLink(advertisementLinkFirst));
     }
 
     private AdvertisementPage addAdvertisementToFavorites(Integer advertisementNumber) {
