@@ -34,8 +34,7 @@ public class SSTest {
     public void testFavoriteAddedToMemo() {
         String advertisementLink = addAdvertisementToFavorites(2).
                 getAdvertisementLink();
-        MemoPage memos = new NavigationMenu().openMemo();
-        assertTrue("The link is not in favorites", memos.isThereMemoWithLink(advertisementLink));
+        assertLinkIsInFavorites(advertisementLink);
     }
 
     @Test
@@ -44,10 +43,14 @@ public class SSTest {
                 .getAdvertisementLink();
         String advertisementLinkSecond = addAdvertisementToFavorites(6)
                 .getAdvertisementLink();
-        MemoPage memos = new NavigationMenu().openMemo();
 
+        assertLinkIsInFavorites(advertisementLinkFirst);
+        assertLinkIsInFavorites(advertisementLinkSecond);
+    }
+
+    private void assertLinkIsInFavorites(String advertisementLinkFirst) {
+        MemoPage memos = new NavigationMenu().openMemo();
         assertTrue("The link is not in favorites", memos.isThereMemoWithLink(advertisementLinkFirst));
-        assertTrue("The link is not in favorites", memos.isThereMemoWithLink(advertisementLinkSecond));
     }
 
     @Test
