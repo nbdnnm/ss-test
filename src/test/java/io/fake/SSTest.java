@@ -34,7 +34,7 @@ public class SSTest {
         String advertisementLink = advertisementPage
                 .getAdvertisementLink();
         MemoPage memos = new NavigationMenu().openMemo();
-        assertTrue(memos.isThereMemoWithLink(advertisementLink));
+        assertTrue("The link is not in favorites", memos.isThereMemoWithLink(advertisementLink));
     }
 
     @Test
@@ -45,8 +45,8 @@ public class SSTest {
                 .getAdvertisementLink();
         MemoPage memos = new NavigationMenu().openMemo();
 
-        assertTrue(memos.isThereMemoWithLink(advertisementLinkFirst));
-        assertTrue(memos.isThereMemoWithLink(advertisementLinkSecond));
+        assertTrue("The link is not in favorites", memos.isThereMemoWithLink(advertisementLinkFirst));
+        assertTrue("The link is not in favorites", memos.isThereMemoWithLink(advertisementLinkSecond));
     }
 
     @Test
