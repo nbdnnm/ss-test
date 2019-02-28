@@ -16,6 +16,8 @@ import static org.junit.Assert.assertTrue;
 
 public class SSTest {
 
+    private static final String PORTAL_URL = "https://www.ss.com/en";
+
     @Before
     public void setUp() {
         Configuration.startMaximized = true;
@@ -24,24 +26,23 @@ public class SSTest {
 
     @Test
     public void testAddToFavoriteAlert() {
-        addAdvertisementToFavorites("Vacancies", "Administrator", 1);
+        addAdvertisementToFavorites(1);
         assertAlertMessageAddedToFavorites();
     }
 
     @Test
     public void testFavoriteAddedToMemo() {
-        AdvertisementPage advertisementPage = addAdvertisementToFavorites("Vacancies", "Administrator", 2);
-        String advertisementLink = advertisementPage
-                .getAdvertisementLink();
+        String advertisementLink = addAdvertisementToFavorites(2).
+                getAdvertisementLink();
         MemoPage memos = new NavigationMenu().openMemo();
         assertTrue("The link is not in favorites", memos.isThereMemoWithLink(advertisementLink));
     }
 
     @Test
     public void testTwoFavoritesAddedToMemo() {
-        String advertisementLinkFirst = addAdvertisementToFavorites("Vacancies", "Administrator", 2)
+        String advertisementLinkFirst = addAdvertisementToFavorites(5)
                 .getAdvertisementLink();
-        String advertisementLinkSecond = addAdvertisementToFavorites("Vacancies", "Administrator", 5)
+        String advertisementLinkSecond = addAdvertisementToFavorites(6)
                 .getAdvertisementLink();
         MemoPage memos = new NavigationMenu().openMemo();
 
@@ -51,16 +52,19 @@ public class SSTest {
 
     @Test
     public void testOpenAdvertisementFromFavorite() {
-        String originalAdvertisementLink = addAdvertisementToFavorites("Vacancies", "Administrator", 3)
+        String originalAdvertisementLink = addAdvertisementToFavorites(3)
                 .getAdvertisementLink();
-        String advertisementLinkOpenedFromMemo = new NavigationMenu().openMemo().openAdvertisementFromMemoWithLink(originalAdvertisementLink).getAdvertisementLink();
+        String advertisementLinkOpenedFromMemo = new NavigationMenu()
+                .openMemo()
+                .openAdvertisementFromMemoWithLink(originalAdvertisementLink)
+                .getAdvertisementLink();
         assertEquals(originalAdvertisementLink, advertisementLinkOpenedFromMemo);
     }
 
     //issue! functionality doesn't work as expected, alert message is not translated
     @Test
     public void testFavoriteAddedFromSearch() {
-        open("https://www.ss.com/en");
+        open(PORTAL_URL);
         new NavigationMenu()
                 .openSearch()
                 .searchByWord("Linux")
@@ -70,14 +74,13 @@ public class SSTest {
         assertAlertMessageAddedToFavorites();
     }
 
-    private AdvertisementPage addAdvertisementToFavorites(String category, String subCategory, Integer advertisementNumber) {
-        open("https://www.ss.com/en");
+    private AdvertisementPage addAdvertisementToFavorites(Integer advertisementNumber) {
+        open(PORTAL_URL);
         return new MainPage()
-                .openCategoryPage(category)
-                .openSubCategoryPage(subCategory)
+                .openCategoryPage("Vacancies")
+                .openSubCategoryPage("Administrator")
                 .openAdvertisement(advertisementNumber)
                 .addToFavourites();
-
     }
 
     private void assertAlertMessageAddedToFavorites() {
@@ -85,5 +88,4 @@ public class SSTest {
                 .getAlertMessage()
                 .shouldHave(Condition.matchesText("Advertisement added to favorites."));
     }
-
 }

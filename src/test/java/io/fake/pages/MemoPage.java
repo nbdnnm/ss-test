@@ -9,10 +9,10 @@ import static com.codeborne.selenide.Selenide.$$x;
 
 public class MemoPage {
 
-    String advertisementNamesXpath = "//form[@id='filter_frm']//tr/td[3]//a";
+    private static final String ADVERTISEMENT_NAMES_XPATH = "//form[@id='filter_frm']//tr/td[3]//a";
 
     public AdvertisementPage openAdvertisementFromMemoWithLink(String advertisenetLink) {
-        $$x(advertisementNamesXpath)
+        $$x(ADVERTISEMENT_NAMES_XPATH)
                 .stream()
                 .filter(selenideElement -> advertisenetLink.contains(selenideElement.attr("href")))
                 .findFirst()
@@ -21,7 +21,7 @@ public class MemoPage {
     }
 
     public boolean isThereMemoWithLink(String link) {
-        List<String> links = $$x(advertisementNamesXpath)
+        List<String> links = $$x(ADVERTISEMENT_NAMES_XPATH)
                 .stream()
                 .map(selenideElement -> selenideElement.attr("href"))
                 .collect(Collectors.toList());
